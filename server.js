@@ -30,8 +30,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.options("*", cors(corsOptions));
-
 
 // Upload and process Excel file
 app.post("/send-sms", upload.single("contacts"), async (req, res) => {
