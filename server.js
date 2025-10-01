@@ -17,7 +17,15 @@ dotenv.config();
 const app = express();
 app.use(express.json())
 const upload = multer({ dest: "/tmp" });
-app.use(cors());
+
+const corsOptions = {
+  origin: ['http://localhost:5173', "https://mg-quick-sms-frontend-pu8u-9gpwtc15x-eshunemmas-projects.vercel.app"], // Allow requests only from this origin
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
+  credentials: true, // Allow sending cookies and authorization headers
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 // Upload and process Excel file
 app.post("/send-sms", upload.single("contacts"), async (req, res) => {
