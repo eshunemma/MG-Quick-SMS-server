@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic SMS Sender</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* 🌟 General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 700px;
+      background: #fff;
+      margin: 40px auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+      color: #444;
+    }
+
+    textarea, input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    button {
+      display: block;
+      margin: 20px auto 0;
+      padding: 12px 20px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    .preview {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #f9f9f9;
+      font-size: 14px;
+    }
+
+    .preview h3 {
+      margin-top: 0;
+      font-size: 16px;
+      color: #444;
+    }
+
+    .preview-item {
+      padding: 8px 10px;
+      background: #fff;
+      margin: 5px 0;
+      border-radius: 6px;
+      border-left: 4px solid #4CAF50;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>📩 Dynamic SMS Sender</h2>
+    <form id="smsForm" action="/send-sms" method="post" enctype="multipart/form-data">
+      <label for="message">Message Template (use {{field}} placeholders)</label>
+      <textarea id="message" name="message" rows="4" placeholder="Hello {{name}}, your appointment is on {{date}} at {{location}}"></textarea>
+
+      <label for="contacts">Upload Excel File</label>
+      <input type="file" id="contacts" name="contacts" accept=".xlsx,.xls" required>
+
+      <button type="submit">🚀 Send Messages</button>
+    </form>
+
+    <div class="preview" id="previewBox" style="display:none;">
+      <h3>🔍 Message Preview (first 3 contacts)</h3>
+      <div id="previewList"></div>
+    </div>
+
+    <div class="footer-note">
+      Powered by <b>Twilio + Node.js</b>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    const fileInput = document.getElementById("contacts");
+    const messageInput = document.getElementById("message");
+    const previewBox = document.getElementById("previewBox");
+    const previewList = document.getElementById("previewList");
+
+    function fillTemplate(template, row) {
+      return template.replace(/{{(.*?)}}/g, (_, key) => row[key.trim()] || "");
+    }
+
+    fileInput.addEventListener("change", () => updatePreview());
+    messageInput.addEventListener("input", () => updatePreview());
+
+    function updatePreview() {
+      const file = fileInput.files[0];
+      const template = messageInput.value;
+      if (!file || !template) {
+        previewBox.style.display = "none";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet);
+
+        previewList.innerHTML = "";
+        rows.slice(0, 3).forEach((row, idx) => {
+          const msg = fillTemplate(template, row);
+          const div = document.createElement("div");
+          div.className = "preview-item";
+          div.textContent = `To ${row.phone || "unknown"} → ${msg}`;
+          previewList.appendChild(div);
+        });
+
+        previewBox.style.display = "block";
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  </script>
+</body>
+</html>
