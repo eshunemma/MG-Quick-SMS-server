@@ -16,7 +16,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-const upload = multer({ dest: "/tmp" });
+const upload = multer({ storage: multer.memoryStorage() });
 
 const corsOptions = {
   origin: [
@@ -30,7 +30,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.options("/*", cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 
 // Upload and process Excel file
