@@ -9,20 +9,23 @@ import {
   sendViaArkesel,
   fillTemplate,
   generateAIMessage,
-  generateAIMessageGemeni
+  generateAIMessageGemeni,
 } from "./utils.js";
 
 dotenv.config();
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 const upload = multer({ dest: "/tmp" });
 
 const corsOptions = {
-  origin: ['http://localhost:5173', "https://mg-quick-sms-frontend-pu8u.vercel.app/"], // Allow requests only from this origin
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
-  credentials: true, // Allow sending cookies and authorization headers
-  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: [
+    "http://localhost:5173",
+    "https://mg-quick-sms-frontend-pu8u.vercel.app/",
+  ],
+  methods: "*",
+  credentials: true,
+  // optionsSuccessStatus: 200 //
 };
 
 app.use(cors(corsOptions));
@@ -91,10 +94,9 @@ app.post("/api/generate-message", async (req, res) => {
   }
 });
 
-
 app.get("/", async (req, res) => {
-  res.send("Welcome To More Gas Quick SMS")
-})
+  res.send("Welcome To More Gas Quick SMS");
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
