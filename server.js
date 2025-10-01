@@ -21,7 +21,7 @@ const upload = multer({ dest: "/tmp" });
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "https://mg-quick-sms-frontend-pu8u.vercel.app/",
+    "https://mg-quick-sms-frontend-pu8u.vercel.app",
   ],
   methods: "*",
   credentials: true,
