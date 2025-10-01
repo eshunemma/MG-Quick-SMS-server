@@ -19,7 +19,7 @@ app.use(express.json())
 const upload = multer({ dest: "/tmp" });
 
 const corsOptions = {
-  origin: ['http://localhost:5173', "https://mg-quick-sms-frontend-pu8u-9gpwtc15x-eshunemmas-projects.vercel.app"], // Allow requests only from this origin
+  origin: ['http://localhost:5173', "https://mg-quick-sms-frontend-pu8u.vercel.app/"], // Allow requests only from this origin
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Allowed HTTP methods
   credentials: true, // Allow sending cookies and authorization headers
   optionsSuccessStatus: 200 // Some legacy browsers (IE11, various SmartTVs) choke on 204
