@@ -20,12 +20,12 @@ const upload = multer({ dest: "/tmp" });
 
 const corsOptions = {
   origin: [
-    "https://mg-quick-sms-frontend-pu8u.vercel.app",
     "http://localhost:5173",
+    "https://mg-quick-sms-frontend-pu8u.vercel.app" // 👈 your actual frontend domain
   ],
-  methods: "*",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
-  // optionsSuccessStatus: 200 //
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
