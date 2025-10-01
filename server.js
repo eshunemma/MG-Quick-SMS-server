@@ -83,6 +83,11 @@ app.post("/api/generate-message", async (req, res) => {
   }
 });
 
+
+app.get("/", async (req, res) => {
+  res.send("Welcome To More Gas Quick SMS")
+})
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`)
