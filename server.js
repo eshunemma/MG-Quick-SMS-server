@@ -21,7 +21,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "https://mg-quick-sms-frontend-pu8u.vercel.app" // 👈 your actual frontend domain
+    "https://mg-quick-sms-frontend-pu8u.vercel.app"
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
@@ -96,7 +96,7 @@ app.post("/api/generate-message", async (req, res) => {
 });
 
 app.get("/", async (req, res) => {
-  res.send("Welcome To More Gas Quick SMS");
+  res.send("Welcome To More Gas Quick SMS😂😂😂😂😂");
 });
 
 const PORT = process.env.PORT || 3000;
