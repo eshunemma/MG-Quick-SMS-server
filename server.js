@@ -21,7 +21,7 @@ const upload = multer({ dest: "/tmp" });
 const corsOptions = {
   origin: [
     "http://localhost:5173",
-    "https://mg-quick-sms-frontend-pu8u.vercel.app" // 👈 your actual frontend domain
+    "https://mg-quick-sms-frontend-pu8u.vercel.app"
   ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
@@ -64,8 +64,6 @@ app.post("/send-sms", upload.single("contacts"), async (req, res) => {
       const personalizedMessage = fillTemplate(messageTemplate, contact);
 
       await sendViaArkesel(contact.phone, personalizedMessage);
-
-      console.log(`✅ SMS sent to ${contact.phone}`);
     }
 
     res.status(200).json({

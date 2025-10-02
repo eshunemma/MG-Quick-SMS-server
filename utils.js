@@ -3,7 +3,7 @@ import axios from "axios";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
+import winston from "winston";
 dotenv.config();
 
 // Twilio client
@@ -48,10 +48,10 @@ export async function sendViaArkesel(phone, message) {
 
   await axios(config)
     .then(function (response) {
-      console.log(JSON.stringify(response.data));
+      logger.info(`⚡️SMS sent successfully to ${phone}-${response?.data?.status}`);
     })
     .catch(function (error) {
-      console.log(error);
+      logger.error(`❌arkesel error ${phone}`, { error });
     });
 }
 
@@ -113,3 +113,18 @@ export async function generateAIMessageGemeni(prompt) {
     throw new Error(error?.message);
   }
 }
+
+const logger = winston.createLogger({
+  level: "info",
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
+  transports: [
+    new winston.transports.Console(),
+    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
+    new winston.transports.File({ filename: "logs/combined.log" })
+  ]
+});
+
+export default logger;
