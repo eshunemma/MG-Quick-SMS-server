@@ -12,6 +12,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
+      - /home/ubuntu/test/logs:/app/logs
+
     networks:
       - sms-network
 
